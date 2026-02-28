@@ -1,4 +1,5 @@
-city = input("My birth city:  ")
+
 birth = int(input("When were you born:  "))
 
-print("You were born in " + (city) + "in " + (birth))
+print("In 2030 years you will be:")
+print(2030-birth)
