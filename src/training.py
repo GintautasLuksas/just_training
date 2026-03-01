@@ -1,5 +1,8 @@
+age = int(input('Please enter your age: '))
 
-birth = int(input("When were you born:  "))
-
-print(f"In 2030 years you will be: {2030-birth}")
-
+if age <= 13:
+    print('Child')
+elif age >= 13 or age > 18:
+    print('You are teen')
+else:
+    print('You are adult')
