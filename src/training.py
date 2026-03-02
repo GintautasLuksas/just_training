@@ -1,8 +1,9 @@
-age = int(input('Please enter your age: '))
+user_input = int(input('Enter a number: '))
+user_input_2 = int(input('Enter a number: '))
+user_input_3 = int(input('Enter a number: '))
 
-if age <= 13:
-    print('Child')
-elif age >= 13 or age > 18:
-    print('You are teen')
-else:
-    print('You are adult')
+numbers = [user_input, user_input_2, user_input_3]
+
+for i in numbers:
+    print(i)
+
