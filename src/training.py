@@ -1,7 +1,4 @@
-numbers = []
+colours = ['blue', 'black', 'yellow']
 
-for i in range(4):
-    num = int(input(f'Please enter number nr {i}:  '))
-    numbers.append(num)
-
-print(numbers)
+for c in colours:
+    print(f'This is the color: {c}')
