@@ -179,13 +179,32 @@ SELECT customer_id, COUNT(price) as total_orders
 FROM orders
 GROUP BY customer_id;
 
+Table
+orders
+id	customer_id	item	 price
+1	    1	    Book	  20
+2	    1	    Pen	      5
+3	    1	    Book	  20
+4	    2	    Laptop	 1000
+5	    2	    Mouse	  25
+6	    3	    Keyboard NULL
+7	    3	    Mouse	  25
+8	    4	    Monitor	  200
+9	    4	    Monitor	  200
+
 Task 3 — Ignore NULL totals
+SELECT customer_id, SUM(price) as total_orders
+FROM orders
+GROUP BY customer_id;
 
 Modify Task 2 so that if a customer only has NULL prices, the result shows 0 instead of NULL.
 
 (You already learned the function for this earlier.)
 
 Task 4 — Unique items per customer
+SELECT customer_id, COUNT(DISTINCS(item)) AS unique_items
+FROM orders
+GROUP BY customer_id;
 
 Write a query that returns:
 
