@@ -267,3 +267,96 @@ Column names:
 
 order_count
 total_spent
+
+-------------------------------------------------------------------------------
+-- =========================
+-- TABLE: orders
+-- =========================
+-- id | customer_id | item     | price
+-- 1  | 1           | Book     | 20
+-- 2  | 1           | Pen      | 5
+-- 3  | 1           | Book     | 20
+-- 4  | 2           | Laptop   | 1000
+-- 5  | 2           | Mouse    | 25
+-- 6  | 3           | Keyboard | NULL
+-- 7  | 3           | Mouse    | 25
+-- 8  | 4           | Monitor  | 200
+-- 9  | 4           | Monitor  | 200
+
+-- =========================
+-- TASK 1 — Orders over 50
+-- Return customer_id, item, price
+-- Only orders where price > 50, sorted descending by price
+-- =========================
+-- Write your SQL below:
+-- SELECT ...
+
+-- =========================
+-- TASK 2 — Total spent per customer
+-- Return customer_id, total_spent
+-- For all customers, even if all prices are NULL (use 0)
+-- =========================
+-- Write your SQL below:
+-- SELECT ...than 50. Sort by total_spent descending.
+
+
+-- =========================
+-- TABLE: orders (repeat)
+-- =========================
+-- id | customer_id | item     | price
+-- 1  | 1           | Book     | 20
+-- 2  | 1           | Pen      | 5
+-- 3  | 1           | Book     | 20
+-- 4  | 2           | Laptop   | 1000
+-- 5  | 2           | Mouse    | 25
+-- 6  | 3           | Keyboard | NULL
+-- 7  | 3           | Mouse    | 25
+-- 8  | 4           | Monitor  | 200
+-- 9  | 4           | Monitor  | 200
+
+-- =========================
+-- TASK 3 — Customers with more than 1 order
+-- Return customer_id, order_count
+-- Only include customers with more than 1 order
+-- =========================
+-- Write your SQL below:
+-- SELECT ...
+
+-- =========================
+-- TASK 4 — Unique items per customer
+-- Return customer_id, unique_items
+-- Number of distinct items per customer, sort descending by unique_items
+-- =========================
+-- Write your SQL below:
+-- SELECT ...
+
+
+-- =========================
+-- TABLE: orders (repeat)
+-- =========================
+-- id | customer_id | item     | price
+-- 1  | 1           | Book     | 20
+-- 2  | 1           | Pen      | 5
+-- 3  | 1           | Book     | 20
+-- 4  | 2           | Laptop   | 1000
+-- 5  | 2           | Mouse    | 25
+-- 6  | 3           | Keyboard | NULL
+-- 7  | 3           | Mouse    | 25
+-- 8  | 4           | Monitor  | 200
+-- 9  | 4           | Monitor  | 200
+
+-- =========================
+-- TASK 5 — High-value customers
+-- Return customer_id, total_spent
+-- Only customers who spent more than 100, sorted descending by total_spent
+-- =========================
+-- Write your SQL below:
+-- SELECT ...
+
+-- =========================
+-- TASK 6 — Orders + total spent + unique items
+-- Return customer_id, order_count, total_spent, unique_items
+-- Only include customers who spent more than 50, sort by total_spent descending
+-- =========================
+-- Write your SQL below:
+-- SELECT ...
