@@ -289,7 +289,11 @@ total_spent
 -- Only orders where price > 50, sorted descending by price
 -- =========================
 -- Write your SQL below:
--- SELECT ...
+SELECT customer_id, item, price
+FROM orders
+WHERE price > 50
+ORDER BY price DESC
+
 
 -- =========================
 -- TASK 2 — Total spent per customer
@@ -297,7 +301,11 @@ total_spent
 -- For all customers, even if all prices are NULL (use 0)
 -- =========================
 -- Write your SQL below:
--- SELECT ...than 50. Sort by total_spent descending.
+SELECT customer_id, COALESCE(SUM(price), 0) AS total_spent
+FROM orders
+GROUP BY customer_id
+
+
 
 
 -- =========================
@@ -320,7 +328,10 @@ total_spent
 -- Only include customers with more than 1 order
 -- =========================
 -- Write your SQL below:
--- SELECT ...
+SELECT customer_id, COUNT(*) AS order_count
+FROM orders
+GROUP BY customer_id
+HAVING COUNT(*) > 1
 
 -- =========================
 -- TASK 4 — Unique items per customer
@@ -328,7 +339,10 @@ total_spent
 -- Number of distinct items per customer, sort descending by unique_items
 -- =========================
 -- Write your SQL below:
--- SELECT ...
+SELECT customer_id, COUNT(DISTINCT(item)) AS unique_items
+FROM orders
+GROUP BY customer_id
+ORDER BY unique_items DESC
 
 
 -- =========================
@@ -351,7 +365,11 @@ total_spent
 -- Only customers who spent more than 100, sorted descending by total_spent
 -- =========================
 -- Write your SQL below:
--- SELECT ...
+SELECT customer_id, SUM(price) as total_spent
+FROM orders
+GROUP BY customer_id
+HAVING SUM(price) > 100
+ORDER BY total_spent DESC
 
 -- =========================
 -- TASK 6 — Orders + total spent + unique items
@@ -359,4 +377,12 @@ total_spent
 -- Only include customers who spent more than 50, sort by total_spent descending
 -- =========================
 -- Write your SQL below:
--- SELECT ...
+SELECT
+    customer_id,
+    COUNT(*) AS order_count,
+    SUM(price) AS total_spent,
+    COUNT(DISTINCT item) as unique_items
+FROM orders
+GROUP BY customer_id
+HAVING SUM(price) > 50
+ORDER BY total_spent DESC
