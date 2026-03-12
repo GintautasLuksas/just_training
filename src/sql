@@ -386,3 +386,159 @@ FROM orders
 GROUP BY customer_id
 HAVING SUM(price) > 50
 ORDER BY total_spent DESC
+
+
+-- =====================================================
+-- TABLES FOR TASK 1 & 2
+-- =====================================================
+
+-- TABLE: customers
+-- id | name
+-- 1  | Alice
+-- 2  | Bob
+-- 3  | Charlie
+-- 4  | Diana
+
+-- TABLE: orders
+-- id | customer_id | item     | price
+-- 1  | 1           | Book     | 20
+-- 2  | 1           | Pen      | 5
+-- 3  | 2           | Laptop   | 1000
+-- 4  | 2           | Mouse    | 25
+-- 5  | 3           | Keyboard | 50
+-- 6  | 4           | Monitor  | 200
+
+
+-- =====================================================
+-- TASK 1 — Customer orders with names
+-- Return:
+-- customer_name
+-- item
+-- price
+-- Join customers and orders tables.
+-- Sort results by price DESC.
+-- =====================================================
+
+SELECT c.name, o.item, o.price
+FROM customers c
+LEFT JOIN orders o
+ON c.id = o.customer_id
+ORDER BY o.price DESC
+
+
+-- =====================================================
+-- TASK 2 — Total spending per customer
+-- Return:
+-- customer_name
+-- total_spent
+-- Show total money spent by each customer.
+-- Sort by total_spent DESC.
+-- =====================================================
+
+SELECT c.name, SUM(o.price) AS total_spent
+FROM customers c
+LEFT JOIN orders o
+ON c.id = o.customer_id
+GROUP BY c.name
+ORDER BY total_spent DESC
+
+
+
+-- =====================================================
+-- TABLES FOR TASK 3 & 4
+-- =====================================================
+
+-- TABLE: products
+-- id | product_name | category
+-- 1  | Laptop       | Electronics
+-- 2  | Mouse        | Electronics
+-- 3  | Keyboard     | Electronics
+-- 4  | Notebook     | Stationery
+-- 5  | Pen          | Stationery
+
+-- TABLE: sales
+-- id | product_id | quantity | price
+-- 1  | 1          | 1        | 1000
+-- 2  | 2          | 2        | 25
+-- 3  | 3          | 1        | 50
+-- 4  | 4          | 3        | 10
+-- 5  | 5          | 5        | 5
+-- 6  | 2          | 1        | 25
+
+
+-- =====================================================
+-- TASK 3 — Products sold per category
+-- Return:
+-- category
+-- total_items_sold
+-- Count how many items were sold per category.
+-- (Use quantity)
+-- =====================================================
+
+-- Write your SQL below:
+SELECT p.category AS category, SUM(s.quantity) as total_items_sold
+FROM products p
+LEFT JOIN sales s
+ON p.id = s.product_id
+GROUP BY category
+
+
+-- =====================================================
+-- TASK 4 — Unique products sold per category
+-- Return:
+-- category
+-- unique_products
+-- Count DISTINCT products sold per category.
+-- =====================================================
+
+-- Write your SQL below:
+
+
+-- =====================================================
+-- TABLES FOR TASK 5 & 6
+-- =====================================================
+
+-- TABLE: employees
+-- id | name  | department_id
+-- 1  | Anna  | 1
+-- 2  | Mark  | 1
+-- 3  | Julia | 2
+-- 4  | Tom   | 2
+
+-- TABLE: departments
+-- id | department_name
+-- 1  | Sales
+-- 2  | IT
+
+-- TABLE: salaries
+-- id | employee_id | salary
+-- 1  | 1           | 3000
+-- 2  | 2           | 3500
+-- 3  | 3           | 4000
+-- 4  | 4           | 4200
+
+
+-- =====================================================
+-- TASK 5 — Employee salary with department
+-- Return:
+-- employee_name
+-- department_name
+-- salary
+-- Join all necessary tables.
+-- Sort by salary DESC.
+-- =====================================================
+
+-- Write your SQL below:
+
+
+
+-- =====================================================
+-- TASK 6 — Average salary per department
+-- Return:
+-- department_name
+-- avg_salary
+-- Show the average salary per department.
+-- Sort by avg_salary DESC.
+-- =====================================================
+
+-- Write your SQL below:
