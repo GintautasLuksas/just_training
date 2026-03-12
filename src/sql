@@ -1,0 +1,126 @@
+Table
+orders
+id	customer_id	item	price
+1	1	Book	           20
+2	1	Pen	              5
+3	1	Book	          20
+4	2	Laptop	         1000
+5	2	Mouse	            25
+6	3	Keyboard	        NULL
+7	3	Mouse	          25
+8	4	Monitor	        200
+9	4	Monitor	        200
+
+
+Task 1
+SELECT COUNT(*)
+FROM orders;
+
+What is the result?
+9
+
+Task 2
+SELECT COUNT(price)
+FROM orders;
+
+Remember: COUNT(column) ignores NULL
+8
+
+Task 3
+SELECT COUNT(DISTINCT price)
+FROM orders;
+
+How many unique non-NULL prices exist?
+5
+
+
+
+Table
+orders
+id	customer_id	item	price
+1	1	Book	           20
+2	1	Pen	              5
+3	1	Book	          20
+4	2	Laptop	         1000
+5	2	Mouse	            25
+6	3	Keyboard	        NULL
+7	3	Mouse	          25
+8	4	Monitor	        200
+9	4	Monitor	        200
+
+
+Task 4
+SELECT customer_id, COUNT(*)
+FROM orders
+GROUP BY customer_id;
+
+Fill result:
+
+customer_id | count
+1 |3
+2 |2
+3 |2
+4 |2
+
+
+Task 5
+SELECT customer_id, COUNT(price)
+FROM orders
+GROUP BY customer_id;
+1 |3
+2 |2
+3 |1
+4 |2
+
+
+Table
+orders
+id	customer_id	item	price
+1	1	Book	           20
+2	1	Pen	              5
+3	1	Book	          20
+4	2	Laptop	         1000
+5	2	Mouse	            25
+6	3	Keyboard	        NULL
+7	3	Mouse	          25
+8	4	Monitor	        200
+9	4	Monitor	        200
+
+Task 6
+SELECT customer_id, SUM(price)
+FROM orders
+GROUP BY customer_id;
+
+1 |45
+2 |1025
+3 |25
+4 |400
+
+Important rule:
+
+SUM() ignores NULL
+
+but if all values are NULL → result = NULL
+
+id	customer_id	item	price
+1	1	Book	           20
+2	1	Pen	              5
+3	1	Book	          20
+4	2	Laptop	         1000
+5	2	Mouse	            25
+6	3	Keyboard	        NULL
+7	3	Mouse	          25
+8	4	Monitor	        200
+9	4	Monitor	        200
+
+Task 7
+SELECT customer_id, COUNT(DISTINCT item)
+FROM orders
+GROUP BY customer_id;
+
+1 | 2
+2 | 2
+3 |2
+4 |1
+
+This one checks if you understand DISTINCT inside groups.
