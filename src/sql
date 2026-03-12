@@ -124,3 +124,105 @@ GROUP BY customer_id;
 4 |1
 
 This one checks if you understand DISTINCT inside groups.
+
+
+SELECT customer_id, COUNT(DISTINCT price)
+FROM orders
+GROUP BY customer_id;
+
+1 | 2
+2 | 2
+3 | 1
+4 | 1
+
+------------------------------------------
+
+Table
+orders
+id	customer_id	item	 price
+1	    1	    Book	  20
+2	    1	    Pen	      5
+3	    1	    Book	  20
+4	    2	    Laptop	 1000
+5	    2	    Mouse	  25
+6	    3	    Keyboard NULL
+7	    3	    Mouse	  25
+8	    4	    Monitor	  200
+9	    4	    Monitor	  200
+Task 1 — Basic filtering
+
+Write a query that returns:
+
+customer_id
+
+price
+
+Only for orders where price is greater than 50.
+
+
+customer_id | price
+  SELECT customer_id, price
+  FROM orders
+  WHERE price > 50
+
+
+Task 2 — Aggregation
+
+Write a query that returns:
+
+customer_id
+    SELECT customer_id, SUM(price) as total_money_spent
+    FROM orders
+    GROUP BY customer_id
+
+SELECT customer_id, COUNT(price) as total_orders
+FROM orders
+GROUP BY customer_id;
+
+Task 3 — Ignore NULL totals
+
+Modify Task 2 so that if a customer only has NULL prices, the result shows 0 instead of NULL.
+
+(You already learned the function for this earlier.)
+
+Task 4 — Unique items per customer
+
+Write a query that returns:
+
+customer_id
+
+number of unique items purchased
+
+Column name:
+
+unique_items
+Task 5 — Customers who spent more than 100
+
+Return:
+
+customer_id
+
+total money spent
+
+But only show customers whose total spending is greater than 100.
+
+This task forces you to use:
+
+GROUP BY
+
+HAVING
+
+Task 6 — Harder
+
+Return:
+
+customer_id
+
+number of orders
+
+total money spent
+
+Column names:
+
+order_count
+total_spent
