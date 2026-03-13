@@ -565,3 +565,162 @@ LEFT JOIN salaries s
     ON e.id = s.employee_id
 GROUP BY department_name
 ORDER BY avg_salary DESC
+
+
+---------------------------------------------------------------------------
+
+-- =====================================================
+-- TABLES FOR TASK 1 & 2
+-- =====================================================
+
+-- TABLE: students
+-- id | name
+-- 1  | Emma
+-- 2  | Liam
+-- 3  | Olivia
+-- 4  | Noah
+
+-- TABLE: exams
+-- id | student_id | subject | score
+-- 1  | 1          | Math    | 85
+-- 2  | 1          | Physics | 90
+-- 3  | 2          | Math    | 70
+-- 4  | 2          | Physics | 60
+-- 5  | 3          | Math    | 95
+-- 6  | 4          | Math    | 50
+-- 7  | 4          | Physics | 55
+
+
+-- =====================================================
+-- TASK 1 — Average score per student
+-- Return:
+-- student_name
+-- avg_score
+-- Sort by avg_score DESC
+-- =====================================================
+
+SELECT
+    s.name AS student_name,
+    AVG(e.score) AS avg_score
+FROM students s
+LEFT JOIN exams e
+    ON  s.id = e.student_id
+GROUP BY student_name
+ORDER BY avg_score DESC
+
+
+
+-- =====================================================
+-- TASK 2 — Students with average score above 80
+-- Return:
+-- student_name
+-- avg_score
+-- Only include students whose average score > 80
+-- =====================================================
+
+SELECT s.name AS student_name, AVG(e.score) AS avg_score
+FROM students s
+LEFT JOIN exams e
+    ON s.id = e.student_id
+GROUP BY student_name
+HAVING AVG(e.score) > 80
+
+
+
+
+-- =====================================================
+-- TABLES FOR TASK 3 & 4
+-- =====================================================
+
+-- TABLE: movies
+-- id | title        | genre
+-- 1  | Inception    | Sci-Fi
+-- 2  | Titanic      | Drama
+-- 3  | Matrix       | Sci-Fi
+-- 4  | Joker        | Drama
+
+-- TABLE: ratings
+-- id | movie_id | rating
+-- 1  | 1        | 9
+-- 2  | 1        | 8
+-- 3  | 2        | 7
+-- 4  | 2        | 8
+-- 5  | 3        | 10
+-- 6  | 3        | 9
+-- 7  | 4        | 8
+
+
+-- =====================================================
+-- TASK 3 — Average rating per movie
+-- Return:
+-- movie_title
+-- avg_rating
+-- Sort by avg_rating DESC
+-- =====================================================
+SELECT m.title AS movie_title, AVG(r.rating) AS avg_rating
+FROM movies m
+LEFT JOIN ratings r
+ON m.id = r.movie_id
+GROUP BY m.title
+ORDER BY avg_rating DESC
+
+
+-- =====================================================
+-- TASK 4 — Average rating per genre
+-- Return:
+-- genre
+-- avg_rating
+-- Sort by avg_rating DESC
+-- =====================================================
+SELECT m.genre AS genre, AVG(r.rating) AS avg_rating
+FROM movies m
+JOIN ratings r
+ON m.id = r.movie_id
+GROUP BY m.genre
+ORDER BY avg_rating DESC
+
+
+
+
+-- =====================================================
+-- TABLES FOR TASK 5 & 6
+-- =====================================================
+
+-- TABLE: drivers
+-- id | name
+-- 1  | Alex
+-- 2  | Maria
+-- 3  | John
+
+-- TABLE: trips
+-- id | driver_id | distance_km | price
+-- 1  | 1         | 10          | 20
+-- 2  | 1         | 5           | 12
+-- 3  | 2         | 8           | 16
+-- 4  | 2         | 15          | 30
+-- 5  | 3         | 20          | 45
+
+
+-- =====================================================
+-- TASK 5 — Total distance driven per driver
+-- Return:
+-- driver_name
+-- total_distance
+-- Sort by total_distance DESC
+-- =====================================================
+
+-- Write your SQL below:
+
+
+
+-- =====================================================
+-- TASK 6 — Driver earnings report
+-- Return:
+-- driver_name
+-- total_trips
+-- total_earnings
+-- avg_trip_price
+-- Sort by total_earnings DESC
+-- =====================================================
+
+-- Write your SQL below:
