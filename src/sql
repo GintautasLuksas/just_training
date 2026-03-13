@@ -788,6 +788,23 @@ ORDER BY avg_rating DESC, total_earnings DESC
 
 
 
+
+-- TABLE: drivers
+-- id | name
+-- 1  | Alex
+-- 2  | Maria
+-- 3  | John
+-- 4  | Sarah
+
+-- TABLE: trips
+-- id | driver_id | distance_km | price | rating
+-- 1  | 1         | 10          | 20    | 5
+-- 2  | 1         | 5           | 12    | 4
+-- 3  | 2         | 8           | 16    | 3
+-- 4  | 2         | 15          | 30    | 4
+-- 5  | 3         | 20          | 45    | 5
+-- 6  | 4         | NULL        | NULL  | NULL
+
 -- =====================================================
 -- TASK 2 — Drivers with distance above 20 km
 -- Return:
@@ -798,8 +815,16 @@ ORDER BY avg_rating DESC, total_earnings DESC
 -- Only include drivers whose total distance_km > 20
 -- Sort by total_distance DESC
 -- =====================================================
-
--- Write your SQL below:
+SELECT
+    d.name,
+    SUM(t.distance_km) AS total_distance,
+    COUNT(*) AS total_trips
+FROM drivers d
+LEFT JOIN trips t
+    ON d.id = t.driver_id
+GROUP BY d.name
+HAVING COUNT(t.distance_km) > 20
+ORDER BY total_distance DESC
 
 
 
@@ -835,10 +860,34 @@ ORDER BY avg_rating DESC, total_earnings DESC
 --
 -- Sort descending by total_borrowings
 -- =====================================================
+SELECT
+    b.category,
+    COUNT(*) AS total_borrowings,
+    SUM(bo.borrowing_days) AS total_borrow_days
+FROM books b
+LEFT JOIN borrowings bo
+    ON b.id = bo.book_id
+GROUP BY b.category
+ORDER BY total_borrowings DESC
 
--- Write your SQL below:
 
 
+-- TABLE: books
+-- id | title           | category
+-- 1  | Harry Potter    | Fantasy
+-- 2  | Lord of Rings   | Fantasy
+-- 3  | 1984            | Dystopian
+-- 4  | Animal Farm     | Dystopian
+-- 5  | Sherlock Holmes | Mystery
+
+-- TABLE: borrowings
+-- id | book_id | member_id | borrow_days
+-- 1  | 1       | 1         | 7
+-- 2  | 1       | 2         | 5
+-- 3  | 2       | 1         | 10
+-- 4  | 3       | 3         | 4
+-- 5  | 4       | 2         | 3
+-- 6  | 5       | 1         | 6
 
 -- =====================================================
 -- TASK 4 — Members who borrowed more than 1 book
@@ -850,8 +899,16 @@ ORDER BY avg_rating DESC, total_earnings DESC
 -- Only include members with more than 1 borrowing
 -- Sort descending by total_books
 -- =====================================================
-
--- Write your SQL below:
+SELECT
+    bo.member_id,
+    COUNT(*) AS total_books,
+    SUM(bo.borrow_days) AS total_borrow_days
+FROM borrowings bo
+JOIN books b
+    ON b.id = bo.book_id
+GROUP BY bo.member_id
+HAVING COUNT(*) > 1
+ORDER BY total_books DESC;
 
 
 
@@ -895,7 +952,7 @@ ORDER BY avg_rating DESC, total_earnings DESC
 -- Sort by avg_completion_percentage DESC
 -- =====================================================
 
--- Write your SQL below:
+
 
 
 
