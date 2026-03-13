@@ -492,7 +492,9 @@ GROUP BY category
 -- =====================================================
 
 -- Write your SQL below:
-
+SELECT category, COUNT(DISTINCT product_name)
+FROM products
+GROUP BY category
 
 -- =====================================================
 -- TABLES FOR TASK 5 & 6
@@ -529,6 +531,17 @@ GROUP BY category
 -- =====================================================
 
 -- Write your SQL below:
+SELECT
+    e.name AS employee_name,
+    d.departments AS department_name,
+    s.salary AS salary
+FROM employees e
+LEFT JOIN departments d
+ON e.department_id = d.id
+LEFT JOIN salaries s
+ON e.id = s.employee_id
+ORDER BY salary DESC
+
 
 
 
