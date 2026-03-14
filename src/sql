@@ -1069,7 +1069,9 @@ ORDER BY avg_completion DESC;
 -- Sort by total_revenue DESC
 -- =====================================================
 
--- Write your SQL below:
+NOw 
+
+
 
 
 -- =====================================================
@@ -1137,4 +1139,3 @@ ORDER BY avg_completion DESC;
 -- Sort by salary DESC
 -- =====================================================
 
--- Write your SQL below:
