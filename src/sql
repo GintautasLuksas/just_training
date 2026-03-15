@@ -1068,8 +1068,17 @@ ORDER BY avg_completion DESC;
 -- total_revenue
 -- Sort by total_revenue DESC
 -- =====================================================
-
-NOw 
+SELECT
+    a.name AS author_name,
+    SUM(s.copies_sold) AS total_books_sold,
+    SUM(s.copies_sold * s.price) AS total_revenue
+FROM authors a
+LEFT JOIN books b
+    ON a.id = b.author_id
+LEFT JOIN sales s
+    ON b.id = s.book_id
+GROUP BY a.name
+ORDER BY total_revenue DESC
 
 
 
