@@ -1145,11 +1145,174 @@ LEFT JOIN departments d
 LEFT JOIN salaries s
     ON e.id = s.employee_id
 GROUP BY d.department_name
-HAVING total_employees > 1
+HAVING COUNT(e.id) >= 1
 ORDER BY total_salary DESC
 
 -- =====================================================
 -- TABLES FOR TASK 5 & 6
 -- =====================================================
 
- 
+
+
+
+ -- =====================================================
+-- TABLES FOR TASK 1 & 2
+-- =====================================================
+
+-- TABLE: customers
+-- id | name
+-- 1  | Alice
+-- 2  | Bob
+-- 3  | Charlie
+-- 4  | Diana
+
+-- TABLE: orders
+-- id | customer_id | order_date
+-- 1  | 1           | 2024-01-01
+-- 2  | 1           | 2024-01-05
+-- 3  | 2           | 2024-01-02
+-- 4  | 3           | 2024-01-03
+
+-- TABLE: payments
+-- id | order_id | amount
+-- 1  | 1        | 100
+-- 2  | 1        | 50
+-- 3  | 2        | 200
+-- 4  | 3        | 80
+
+
+-- =====================================================
+-- TASK 1 — Total paid per customer
+-- Return:
+-- customer_name
+-- total_paid
+-- Include customers with no payments (show 0)
+-- Sort by total_paid DESC
+-- =====================================================
+SELECT
+    c.name AS customer_name,
+    COALESCE(SUM(p.amount), 0) AS total_paid
+FROM customers c
+LEFT JOIN orders o
+    ON c.id = o.customer_id
+LEFT JOIN payments p
+    ON o.id = p.order_id
+GROUP BY c.name
+ORDER BY total_paid DESC;
+
+
+
+-- =====================================================
+-- TASK 2 — Customers with more than 1 order
+-- Return:
+-- customer_name
+-- total_orders
+-- total_paid
+-- Only include customers with more than 1 order
+-- Sort by total_paid DESC
+-- =====================================================
+
+-- Write your SQL below:
+
+-- =====================================================
+-- TABLES FOR TASK 3 & 4
+-- =====================================================
+
+-- TABLE: products
+-- id | name       | category
+-- 1  | Laptop     | Tech
+-- 2  | Phone      | Tech
+-- 3  | Chair      | Furniture
+-- 4  | Desk       | Furniture
+
+-- TABLE: order_items
+-- id | product_id | quantity | price
+-- 1  | 1          | 1        | 1000
+-- 2  | 2          | 2        | 500
+-- 3  | 3          | 3        | 150
+-- 4  | 4          | 1        | 300
+-- 5  | 1          | 1        | 900
+
+-- TABLE: reviews
+-- id | product_id | rating
+-- 1  | 1          | 5
+-- 2  | 1          | 4
+-- 3  | 2          | 3
+-- 4  | 3          | 4
+
+
+-- =====================================================
+-- TASK 3 — Revenue per category
+-- Return:
+-- category
+-- total_revenue
+-- total_items_sold
+-- Sort by total_revenue DESC
+-- =====================================================
+
+-- Write your SQL below:
+
+
+
+-- =====================================================
+-- TASK 4 — Top rated products with revenue
+-- Return:
+-- product_name
+-- avg_rating
+-- total_revenue
+-- Only include products with at least 1 review
+-- Sort by avg_rating DESC, total_revenue DESC
+-- =====================================================
+
+-- Write your SQL below:
+
+-- =====================================================
+-- TABLES FOR TASK 5 & 6
+-- =====================================================
+
+-- TABLE: users
+-- id | name
+-- 1  | Tom
+-- 2  | Sara
+-- 3  | Mike
+
+-- TABLE: logins
+-- id | user_id | login_date
+-- 1  | 1       | 2024-01-01
+-- 2  | 1       | 2024-01-02
+-- 3  | 2       | 2024-01-01
+
+-- TABLE: actions
+-- id | user_id | action_type
+-- 1  | 1       | click
+-- 2  | 1       | purchase
+-- 3  | 1       | click
+-- 4  | 2       | click
+
+
+-- =====================================================
+-- TASK 5 — User activity summary
+-- Return:
+-- user_name
+-- total_logins
+-- total_actions
+-- Include users with no actions
+-- Sort by total_actions DESC
+-- =====================================================
+
+-- Write your SQL below:
+
+
+
+-- =====================================================
+-- TASK 6 — Active users (engagement filter)
+-- Return:
+-- user_name
+-- total_logins
+-- total_actions
+-- Only include users with:
+-- total_actions > total_logins
+-- Sort by total_actions DESC
+-- =====================================================
+
+-- Write your SQL below:
