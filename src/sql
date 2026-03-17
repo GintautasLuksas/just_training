@@ -1148,15 +1148,8 @@ GROUP BY d.department_name
 HAVING total_employees > 1
 ORDER BY total_salary DESC
 
-
 -- =====================================================
--- TASK 6 — Employees earning above department average
--- Return:
--- employee_name
--- department_name
--- salary
--- bonus
--- Only include employees whose salary > department avg
--- Sort by salary DESC
+-- TABLES FOR TASK 5 & 6
 -- =====================================================
 
+ 
