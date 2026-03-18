@@ -1200,8 +1200,6 @@ LEFT JOIN payments p
 GROUP BY c.name
 ORDER BY total_paid DESC;
 
-
-
 -- =====================================================
 -- TASK 2 — Customers with more than 1 order
 -- Return:
