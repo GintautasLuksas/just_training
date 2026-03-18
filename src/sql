@@ -1200,6 +1200,31 @@ LEFT JOIN payments p
 GROUP BY c.name
 ORDER BY total_paid DESC;
 
+
+ -- =====================================================
+-- TABLES FOR TASK 1 & 2
+-- =====================================================
+
+-- TABLE: customers
+-- id | name
+-- 1  | Alice
+-- 2  | Bob
+-- 3  | Charlie
+-- 4  | Diana
+
+-- TABLE: orders
+-- id | customer_id | order_date
+-- 1  | 1           | 2024-01-01
+-- 2  | 1           | 2024-01-05
+-- 3  | 2           | 2024-01-02
+-- 4  | 3           | 2024-01-03
+
+-- TABLE: payments
+-- id | order_id | amount
+-- 1  | 1        | 100
+-- 2  | 1        | 50
+-- 3  | 2        | 200
+-- 4  | 3        | 80
 -- =====================================================
 -- TASK 2 — Customers with more than 1 order
 -- Return:
@@ -1209,8 +1234,18 @@ ORDER BY total_paid DESC;
 -- Only include customers with more than 1 order
 -- Sort by total_paid DESC
 -- =====================================================
-
--- Write your SQL below:
+SELECT
+    c.name AS customer_name,
+    COUNT(DISTINCT o.id),
+    SUM(p.amount) AS total_paid
+FROM customers c
+LEFT JOIN orders o
+    ON c.id = o.customer_id
+LEFT JOIN  payments p
+    ON o.id = p.order_id
+GROUP BY c.name
+HAVING COUNT(DISTINCT o.id) > 1
+ORDER BY total_paid DESC
 
 -- =====================================================
 -- TABLES FOR TASK 3 & 4
