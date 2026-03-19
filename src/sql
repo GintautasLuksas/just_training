@@ -1274,7 +1274,6 @@ ORDER BY total_paid DESC
 -- 4  | 3          | 4
 
 
-
 -- =====================================================
 -- TASK 3 — Revenue per category
 -- Return:
@@ -1283,8 +1282,15 @@ ORDER BY total_paid DESC
 -- total_items_sold
 -- Sort by total_revenue DESC
 -- =====================================================
-
--- Write your SQL below:
+SELECT
+    p.category AS category,
+    SUM(o.quantity * o.price) AS total_revenue,
+    SUM(o.quantity) AS total_items_sold
+FROM products p
+LEFT JOIN order_items o
+ON p.id = o.product_id
+GROUP BY category
+ORDER BY total_revenue DESC
 
 
 
