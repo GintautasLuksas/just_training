@@ -1274,6 +1274,7 @@ ORDER BY total_paid DESC
 -- 4  | 3          | 4
 
 
+
 -- =====================================================
 -- TASK 3 — Revenue per category
 -- Return:
