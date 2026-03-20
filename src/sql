@@ -1400,6 +1400,24 @@ LEFT JOIN (
 
 ORDER BY total_actions DESC;
 
+-- TABLE: users
+-- id | name
+-- 1  | Tom
+-- 2  | Sara
+-- 3  | Mike
+
+-- TABLE: logins
+-- id | user_id | login_date
+-- 1  | 1       | 2024-01-01
+-- 2  | 1       | 2024-01-02
+-- 3  | 2       | 2024-01-01
+
+-- TABLE: actions
+-- id | user_id | action_type
+-- 1  | 1       | click
+-- 2  | 1       | purchase
+-- 3  | 1       | click
+-- 4  | 2       | click
 
 -- =====================================================
 -- TASK 6 — Active users (engagement filter)
@@ -1411,5 +1429,184 @@ ORDER BY total_actions DESC;
 -- total_actions > total_logins
 -- Sort by total_actions DESC
 -- =====================================================
+SELECT
+    u.name AS user_name,
+    COALESCE(l.total_logins, 0) AS total_logins,
+    COALESCE(a.total_actions, 0) AS total_actions
+FROM users u
+LEFT JOIN (
+        SELECT user_id, COUNT(*) AS total_logins
+        FROM logins
+        GROUP BY user_id
+        ORDER BY user_id) l
+ON u.id = l.user_id
+LEFT JOIN(
+        SELECT user_id, COUNT(*) AS total_actions
+        FROM actions
+        GROUP BY user_id
+        ORDER BY user_id) a
+ON u.id = a.user_id
+WHERE total_logins < total_actions
+ORDER BY total_actions
 
--- Write your SQL below:
+
+====================================================================================================================================================================================================================
+TABLES FOR TASK 1 & 2
+=====================================================
+
+TABLE: users
+id | name
+1  | Tom
+2  | Sara
+3  | Mike
+4  | John
+5  | Anna
+
+TABLE: posts
+id | user_id | created_at
+1  | 1       | 2024-01-01
+2  | 1       | 2024-01-02
+3  | 2       | 2024-01-03
+4  | 3       | 2024-01-04
+5  | 3       | 2024-01-05
+6  | 3       | 2024-01-06
+
+TABLE: likes
+id | post_id | user_id
+1  | 1       | 2
+2  | 1       | 3
+3  | 2       | 2
+4  | 3       | 1
+5  | 3       | 2
+6  | 3       | 4
+
+
+=====================================================
+TASK 1 — Post performance per user
+Return:
+- user_name
+- total_posts
+- total_likes_received
+
+Include users with no posts (show 0)
+Sort by total_likes_received DESC
+=====================================================
+
+
+=====================================================
+TASK 2 — Users who receive more likes than they give
+Return:
+- user_name
+- likes_given
+- likes_received
+
+Only include users where:
+likes_received > likes_given
+
+Sort by likes_received DESC
+=====================================================
+
+
+=====================================================
+TABLES FOR TASK 3 & 4
+=====================================================
+
+TABLE: products
+id | name
+1  | Keyboard
+2  | Mouse
+3  | Monitor
+4  | Headphones
+
+TABLE: sales
+id | product_id | quantity | sale_price
+1  | 1          | 2        | 50
+2  | 1          | 1        | 45
+3  | 2          | 5        | 20
+4  | 3          | 1        | 200
+5  | 4          | 2        | 100
+
+TABLE: returns
+id | product_id | quantity
+1  | 1          | 1
+2  | 2          | 2
+
+
+=====================================================
+TASK 3 — Net revenue per product
+Return:
+- product_name
+- gross_revenue
+- returned_items
+- net_revenue (gross - returned_value)
+
+Sort by net_revenue DESC
+=====================================================
+
+
+=====================================================
+TASK 4 — Products with high return rate
+Return:
+- product_name
+- total_sold
+- total_returned
+- return_rate (returned / sold)
+
+Only include products where:
+return_rate > 0.2
+
+Sort by return_rate DESC
+=====================================================
+
+
+=====================================================
+TABLES FOR TASK 5 & 6
+=====================================================
+
+TABLE: employees
+id | name
+1  | Tom
+2  | Sara
+3  | Mike
+4  | John
+
+TABLE: projects
+id | name
+1  | Alpha
+2  | Beta
+3  | Gamma
+
+TABLE: assignments
+id | employee_id | project_id | hours_worked
+1  | 1           | 1          | 10
+2  | 1           | 2          | 5
+3  | 2           | 1          | 8
+4  | 2           | 3          | 12
+5  | 3           | 2          | 7
+6  | 4           | 3          | 3
+
+
+=====================================================
+TASK 5 — Employee workload summary
+Return:
+- employee_name
+- total_projects
+- total_hours
+
+Include employees with no assignments
+Sort by total_hours DESC
+=====================================================
+
+
+=====================================================
+TASK 6 — Overloaded employees
+Return:
+- employee_name
+- total_hours
+- avg_hours_per_project
+
+Only include employees where:
+total_hours > 10
+
+Sort by total_hours DESC
+====================================================================================================================================================================================================================
