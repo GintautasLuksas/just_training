@@ -29,3 +29,5 @@ for n in the_list:
 
 print(changed_list)
 
+changed_list = [int(n) for n in the_list]
+

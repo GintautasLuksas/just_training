@@ -1358,7 +1358,6 @@ ORDER BY avg_rating DESC, total_revenue DESC
 -- 3  | 1       | click
 -- 4  | 2       | click
 
-
 -- =====================================================
 -- TASK 5 — User activity summary
 -- Return:
@@ -1368,9 +1367,38 @@ ORDER BY avg_rating DESC, total_revenue DESC
 -- Include users with no actions
 -- Sort by total_actions DESC
 -- =====================================================
+SELECT
+    u.name AS user_name,
+    COUNT(l.login_date) AS total_logins,
+    COALESCE(COUNT(a.action_type), 0) AS total_actions
+FROM users u
+LEFT JOIN logins l
+    ON u.id = l.user_id
+LEFT JOIN actions a
+    ON u.id = a.user_id
+GROUP BY u.name
+ORDER BY total_actions DESC
 
--- Write your SQL below:
+Right:
+SELECT
+    u.name AS user_name,
+    COALESCE(l.total_logins, 0) AS total_logins,
+    COALESCE(a.total_actions, 0) AS total_actions
+FROM users u
+LEFT JOIN (
+    SELECT user_id, COUNT(*) AS total_logins
+    FROM logins
+    GROUP BY user_id
+) l
+    ON u.id = l.user_id
+LEFT JOIN (
+    SELECT user_id, COUNT(*) AS total_actions
+    FROM actions
+    GROUP BY user_id
+) a
+    ON u.id = a.user_id
 
+ORDER BY total_actions DESC;
 
 
 -- =====================================================
