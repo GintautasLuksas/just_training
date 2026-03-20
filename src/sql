@@ -1292,7 +1292,27 @@ ON p.id = o.product_id
 GROUP BY category
 ORDER BY total_revenue DESC
 
+-- TABLE: products
+-- id | name       | category
+-- 1  | Laptop     | Tech
+-- 2  | Phone      | Tech
+-- 3  | Chair      | Furniture
+-- 4  | Desk       | Furniture
 
+-- TABLE: order_items
+-- id | product_id | quantity | price
+-- 1  | 1          | 1        | 1000
+-- 2  | 2          | 2        | 500
+-- 3  | 3          | 3        | 150
+-- 4  | 4          | 1        | 300
+-- 5  | 1          | 1        | 900
+
+-- TABLE: reviews
+-- id | product_id | rating
+-- 1  | 1          | 5
+-- 2  | 1          | 4
+-- 3  | 2          | 3
+-- 4  | 3          | 4
 
 -- =====================================================
 -- TASK 4 — Top rated products with revenue
@@ -1303,8 +1323,17 @@ ORDER BY total_revenue DESC
 -- Only include products with at least 1 review
 -- Sort by avg_rating DESC, total_revenue DESC
 -- =====================================================
-
--- Write your SQL below:
+SELECT
+    p.name AS product_name,
+    AVG(r.rating) AS avg_rating,
+    SUM(o.quantity * o.price) AS total_revenue
+FROM products p
+JOIN order_items o
+    ON p.id = o.product_id
+JOIN reviews r
+    ON p.id = r.product_id
+HAVING SUM(product_id) > 1
+ORDER BY avg_rating DESC, total_revenue DESC
 
 -- =====================================================
 -- TABLES FOR TASK 5 & 6
