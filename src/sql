@@ -1490,7 +1490,23 @@ Return:
 
 Include users with no posts (show 0)
 Sort by total_likes_received DESC
-=====================================================
+
+SELECT
+    u.name AS user_name,
+    COALESCE(p.total_posts, 0),
+    l.total_likes_received
+FROM users u
+LEFT JOIN
+            (SELECT user_id, COUNT(*) AS total_posts
+            FROM posts
+            GROUP BY user_id) p
+ON u.id = p.user_id
+LEFT JOIN
+         (SELECT post_id, COUNT(*) AS total_likes_received, user_id
+         FROM likes
+         GROUP BY post_id, user_id) l
+ON u.id = l.user_id
+ORDER BY total_likes_received DESC
 
 
 =====================================================
