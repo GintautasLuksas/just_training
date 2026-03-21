@@ -1569,7 +1569,21 @@ Only include users where:
 likes_received > likes_given
 
 Sort by likes_received DESC
-=====================================================
+
+SELECT
+    u.name AS user_name,
+    l.likes_given,
+    l.likes_received
+FROM users u
+LEFT JOIN
+    (SELECT p.user_id, l.likes_given, l.likes_received
+    FROM posts p
+        (SELECT l.user_id, COALESCE(COUNT(post_id), 0) AS l.likes_received, COALESCE(COUNT(user_id), 0) AS l.likes_given
+        FROM likes l
+        GROUPY BY user_id)
+    ON p.user_id = l.user_id
+ON u.id = p.user_id
+WHERE l.likes_received > l.likes_given
 
 
 =====================================================
