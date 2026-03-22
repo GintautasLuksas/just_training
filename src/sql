@@ -1585,6 +1585,34 @@ LEFT JOIN
 ON u.id = p.user_id
 WHERE l.likes_received > l.likes_given
 
+SELECT
+    u.name AS user_name,
+    COALESCE(g.likes_given, 0) AS likes_given,
+    COALESCE(r.likes_received, 0) AS likes_received
+FROM users u
+
+LEFT JOIN (
+    SELECT user_id, COUNT(*) AS likes_given
+    FROM likes
+    GROUP BY user_id
+) g
+ON u.id = g.user_id
+
+LEFT JOIN (
+    SELECT
+        p.user_id,
+        COUNT(l.id) AS likes_received
+    FROM posts p
+    LEFT JOIN likes l
+        ON p.id = l.post_id
+    GROUP BY p.user_id
+) r
+ON u.id = r.user_id
+
+WHERE COALESCE(r.likes_received, 0) > COALESCE(g.likes_given, 0)
+
+ORDER BY likes_received DESC;
+
 
 =====================================================
 TABLES FOR TASK 3 & 4
