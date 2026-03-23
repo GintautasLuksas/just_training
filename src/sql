@@ -1737,13 +1737,54 @@ return_rate > 0.2
 
 Sort by return_rate DESC
 =====================================================
+SELECT
+    p.name AS product_name,
+    COALESCE(s.total_sold, 0) AS total_sold,
+    COALESCE(r.total_returned, 0) AS total_returned,
+    COALESCE(r.total_returned, 0) / COALESCE(s.total_sold, 0) AS return_rate
+FROM products p
+LEFT JOIN(
+    SELECT product_id, SUM(quantity) AS total_sold
+    FROM sales
+    GROUP BY product_id) s
+ON  p.id = s.product_id
+LEFT JOIN(
+    SELECT product_id, SUM(quantity) AS total_returned
+    FROM returns
+    GROUP BY product_id) r
+ON p.id = r.product_id
+WHERE return_rate > 0.2
+ORDER BY return_rate DESC
 
 
 
+SELECT *
+FROM (
+    SELECT
+        p.name AS product_name,
+        COALESCE(s.total_sold, 0) AS total_sold,
+        COALESCE(r.total_returned, 0) AS total_returned,
+        COALESCE(r.total_returned, 0) * 1.0 / NULLIF(s.total_sold, 0) AS return_rate
 
+    FROM products p
 
+    LEFT JOIN (
+        SELECT product_id, SUM(quantity) AS total_sold
+        FROM sales
+        GROUP BY product_id
+    ) s
+    ON p.id = s.product_id
 
+    LEFT JOIN (
+        SELECT product_id, SUM(quantity) AS total_returned
+        FROM returns
+        GROUP BY product_id
+    ) r
+    ON p.id = r.product_id
+) t
 
+WHERE return_rate > 0.2
+ORDER BY return_rate DESC;
 
 
 
