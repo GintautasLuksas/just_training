@@ -1649,7 +1649,60 @@ Return:
 
 Sort by net_revenue DESC
 =====================================================
+SELECT
+    p.name AS product_name,
+    s.gross-revenue,
+    r.returned_items,
+    s.net_revenue
+FROM products p
+LEFT JOIN
+    (SELECT product_id,
+    SUM(quantity * sales_price) AS gross_revenue
+    FROM sales
+    GROUP BY product_id) s
+ON p.id = s.product_id
+LEFT JOIN
+    (SELECT
+    r.product_id,
+    SUM(r.quantity) AS returned_items,
+    SUM(s.gross_revenue - r.quantity * s.sales_price) AS net_revenue
+    FROM returns r
+    LEFT JOIN sales s
+    ON r.product_id = s.product_id
+    GROUP BY product.id) r
+ON p.id = r.id
+ORDER BY net_revenue DESC
 
+
+
+SELECT
+    p.name AS product_name,
+    COALESCE(s.gross_revenue, 0) AS gross_revenue,
+    COALESCE(r.returned_items, 0) AS returned_items,
+    COALESCE(s.gross_revenue, 0) - COALESCE(r.returned_value, 0) AS net_revenue
+
+FROM products p
+
+LEFT JOIN (
+    SELECT
+        product_id,
+        SUM(quantity * sale_price) AS gross_revenue
+    FROM sales
+    GROUP BY product_id
+) s
+ON p.id = s.product_id
+
+LEFT JOIN (
+    SELECT
+        product_id,
+        SUM(quantity) AS returned_items,
+        SUM(quantity * 1) AS returned_value -- simplified assumption
+    FROM returns
+    GROUP BY product_id
+) r
+ON p.id = r.product_id
+
+ORDER BY net_revenue DESC;
 
 =====================================================
 TASK 4 — Products with high return rate
