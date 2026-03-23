@@ -1704,6 +1704,28 @@ ON p.id = r.product_id
 
 ORDER BY net_revenue DESC;
 
+TABLES FOR TASK 3 & 4
+=====================================================
+
+TABLE: products
+id | name
+1  | Keyboard
+2  | Mouse
+3  | Monitor
+4  | Headphones
+
+TABLE: sales
+id | product_id | quantity | sale_price
+1  | 1          | 2        | 50
+2  | 1          | 1        | 45
+3  | 2          | 5        | 20
+4  | 3          | 1        | 200
+5  | 4          | 2        | 100
+
+TABLE: returns
+id | product_id | quantity
+1  | 1          | 1
+2  | 2          | 2
 =====================================================
 TASK 4 — Products with high return rate
 Return:
@@ -1717,6 +1739,17 @@ return_rate > 0.2
 
 Sort by return_rate DESC
 =====================================================
+
+
+
+
+
+
+
+
+
+
+
 
 
 =====================================================
