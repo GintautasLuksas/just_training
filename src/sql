@@ -1843,6 +1843,32 @@ SELECT
     COALESCE(SUM(a.total_hours), 0) AS total_hours
 FROM employees e
 LEFT JOIN(
+    SELECT
+    employee_id,
+    COUNT(project_id) AS total_projects,
+    SUM(hours_worked) AS total_hours
+    FROM assignments
+    GROUP BY employee_id) a
+ON e.id = a.employee_id
+ORDER BY total_hours DESC
+
+SELECT
+    e.name AS employee_name,
+    COALESCE(a.total_projects, 0) AS total_projects,
+    COALESCE(a.total_hours, 0) AS total_hours
+FROM employees e
+
+LEFT JOIN (
+    SELECT
+        employee_id,
+        COUNT(project_id) AS total_projects,
+        SUM(hours_worked) AS total_hours
+    FROM assignments
+    GROUP BY employee_id
+) a
+ON e.id = a.employee_id
+
+ORDER BY total_hours DESC;
     
 
 
