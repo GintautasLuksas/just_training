@@ -1829,6 +1829,18 @@ Include employees with no assignments
 Sort by total_hours DESC
 =====================================================
 
+SELECT
+    e.name AS employee_name,
+    COALESCE(COUNT(a.total_projects), 0) AS total_projects,
+    COALESCE(SUM(a.total_hours), 0) AS total_hours
+FROM employees e
+LEFT JOIN(
+    
+
+
+
+
+
 
 =====================================================
 TASK 6 — Overloaded employees
