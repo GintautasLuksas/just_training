@@ -1736,6 +1736,14 @@ Only include products where:
 return_rate > 0.2
 
 Sort by return_rate DESC
+
+SELECT
+    p.name AS product_name,
+    SUM(s.quantity) AS total_sold,
+    SUM(r.quantity) AS total_returned,
+    returned / total_sold AS return_rate
+FROM products p
+
 =====================================================
 SELECT
     p.name AS product_name,
