@@ -1919,9 +1919,32 @@ LEFT JOIN(
         employee_id,
         COUNT(project_id) AS project_amount,
         SUM(hours_worked) AS total_hours
-        GROUP BY employee_id
+    FROM assignments
+    GROUP BY employee_id
         ) a
-ON e.id = employee_id
+ON e.id = a.employee_id
 WHERE COALESCE(a.total_hours, 0) > 10
 ORDER BY total_hours
+
+
+SELECT
+    e.name AS employee_name,
+    COALESCE(a.total_hours, 0) AS total_hours,
+    COALESCE(a.total_hours, 0) * 1.0 / NULLIF(a.project_amount, 0) AS avg_hours_per_project
+
+FROM employees e
+
+LEFT JOIN (
+    SELECT
+        employee_id,
+        COUNT(project_id) AS project_amount,
+        SUM(hours_worked) AS total_hours
+    FROM assignments
+    GROUP BY employee_id
+) a
+ON e.id = a.employee_id
+
+WHERE COALESCE(a.total_hours, 0) > 10
+
+ORDER BY total_hours DESC;
 ====================================================================================================================================================================================================================
