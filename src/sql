@@ -1917,6 +1917,7 @@ id | student_id | course_id | score
 5  | 3          | 3         | 75
 
 
+
 =====================================================
 TASK 9 — Student performance summary
 Return:
@@ -1928,6 +1929,11 @@ Include students with no enrollments
 Sort by avg_score DESC
 =====================================================
 
+SELECT
+    s.name AS student_name,
+    COALESCE(e.total_courses, 0),
+    total_score / total_courses AS avg_score
+FROM students s
 
 =====================================================
 TASK 10 — Top students
