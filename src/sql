@@ -1931,10 +1931,17 @@ Sort by avg_score DESC
 
 SELECT
     s.name AS student_name,
-    COALESCE(e.total_courses, 0),
-    total_score / total_courses AS avg_score
+    COALESCE(e.total_courses, 0) AS total_courses,
+    COALESCE(e.total_score, 0) * 1.0 / NULLIF(e.total_courses, 0) AS avg_score
 FROM students s
-
+LEFT JOIN(
+    SELECT student_id,
+    COUNT(course_id) AS total_courses,
+    SUM(score) AS total_score
+    FROM enrollments
+    GROUP BY student_id) e
+ON s.id = e.student_id
+ORDER BY avg_score DESC
 =====================================================
 TASK 10 — Top students
 Return:
