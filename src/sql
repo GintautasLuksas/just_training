@@ -1942,6 +1942,28 @@ LEFT JOIN(
     GROUP BY student_id) e
 ON s.id = e.student_id
 ORDER BY avg_score DESC
+
+
+TABLE: students
+id | name
+1  | Tom
+2  | Sara
+3  | Mike
+4  | Anna
+
+TABLE: courses
+id | name
+1  | Math
+2  | Physics
+3  | History
+
+TABLE: enrollments
+id | student_id | course_id | score
+1  | 1          | 1         | 80
+2  | 1          | 2         | 90
+3  | 2          | 1         | 70
+4  | 3          | 2         | 60
+5  | 3          | 3         | 75
 =====================================================
 TASK 10 — Top students
 Return:
@@ -1953,6 +1975,40 @@ avg_score > overall_average_score
 
 Sort by avg_score DESC
 =====================================================
+
+
+SELECT s.name, e.avg_score AS avg_score
+FROM students s
+LEFT JOIN(
+    SELECT student_id, AVG(score) AS avg_score, COUNT(course_id) / SUM(score) AS overall_average_score
+    FROM enrollments
+    GROUP BY student_id
+    ) e
+ON s.id = e.student_id
+WHERE e.avg_score > e.overall_average_score
+ORDER BY avg_score DESC
+
+
+SELECT
+    s.name AS student_name,
+    e.avg_score
+FROM students s
+
+LEFT JOIN (
+    SELECT
+        student_id,
+        AVG(score) AS avg_score
+    FROM enrollments
+    GROUP BY student_id
+) e
+ON s.id = e.student_id
+
+WHERE e.avg_score > (
+    SELECT AVG(score) FROM enrollments
+)
+
+ORDER BY avg_score DESC;
+
 
 =====================================================
 TABLES FOR TASK 11 & 12
