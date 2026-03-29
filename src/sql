@@ -1998,6 +1998,7 @@ LEFT JOIN (
     SELECT
         student_id,
         AVG(score) AS avg_score
+
     FROM enrollments
     GROUP BY student_id
 ) e
