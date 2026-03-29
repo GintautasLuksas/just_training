@@ -2035,9 +2035,6 @@ id | book_id | quantity
 3  | 3       | 3
 4  | 4       | 1
 
-
-
-
 =====================================================
 TASK 11 — Author revenue
 Return:
@@ -2048,8 +2045,45 @@ Return:
 Include authors with no books or sales
 Sort by total_revenue DESC
 =====================================================
+SELECT a.name,
+    COALESCE(b.total_books, 0),
+    COALESCE(b.total_revenue, 0)
+FROM authors a
+LEFT JOIN(
+    SELECT author_id, SUM(price) AS total_revenue, s.total_books AS total_books
+    FROM books b
+        LEFT JOIN(
+        SELECT book_id, SUM(quantity) AS total_books
+        FROM sales,
+        GROUP BY book_id) s
+        ON b.id = s.book_id
+    GROUP BY author_id) b
+ON a.id = b.author_id
+ORDER BY b.total_revenue DESC
 
 
+SELECT
+    a.name AS author_name,
+    COALESCE(b.total_books, 0) AS total_books,
+    COALESCE(b.total_revenue, 0) AS total_revenue
+
+FROM authors a
+
+LEFT JOIN (
+    SELECT
+        b.author_id,
+        COUNT(b.id) AS total_books,
+        SUM(s.quantity * b.price) AS total_revenue
+
+    FROM books b
+    LEFT JOIN sales s
+        ON b.id = s.book_id
+
+    GROUP BY b.author_id
+) b
+ON a.id = b.author_id
+
+ORDER BY total_revenue DESC;
 =====================================================
 TASK 12 — High performing authors
 Return:
