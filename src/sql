@@ -2133,6 +2133,44 @@ Include departments with no salaries
 Sort by total_salary DESC
 =====================================================
 
+SELECT
+    d.name,
+    e.total_employees AS total_employees,
+    COALESCE(s.total_salary, 0) AS total_salary
+FROM departments d
+LEFT JOIN
+    (SELECT
+        e.id,
+        e.department_id,
+        COUNT(e.name) AS total_employees,
+        SUM(s.salary) AS total_salary
+    FROM employees
+    LEFT JOIN(
+        SELECT employee_id, SUM(amount) AS total_salary
+        FROM salaries
+        GROUP BY employee_id) s
+    GROUP BY e.department_id
+ON e.id = s.employee_id
+ORDER BY s.total_salary DESC
+
+SELECT
+    d.name AS department_name,
+    COUNT(DISTINCT e.id) AS total_employees,
+    COALESCE(SUM(s.amount), 0) AS total_salary
+
+FROM departments d
+
+LEFT JOIN employees e
+    ON d.id = e.department_id
+
+LEFT JOIN salaries s
+    ON e.id = s.employee_id
+
+GROUP BY d.name
+
+ORDER BY total_salary DESC;
+
+
 
 =====================================================
 TASK 14 — High paying departments
