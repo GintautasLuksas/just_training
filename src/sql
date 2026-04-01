@@ -2171,9 +2171,6 @@ GROUP BY d.name
 ORDER BY total_salary DESC;
 
 
-
-
-
 =====================================================
 TASK 14 — High paying departments
 Return:
