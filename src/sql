@@ -2177,6 +2177,8 @@ Return:
 - department_name
 - avg_salary
 
+
+
 Only include departments where:
 avg_salary > overall_avg_salary
 
