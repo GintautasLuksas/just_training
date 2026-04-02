@@ -2272,7 +2272,16 @@ Return:
 Include customers with no orders or payments
 Sort by total_paid DESC
 =====================================================
-
+SELECT c.name AS customer_name,
+    COALESCE(COUNT(p.order_id), 0) AS total_orders,
+    COALESCE(SUM(p.amount), 0) AS total_paid
+FROM customers c
+    LEFT JOIN orders o
+    ON c.id = o.customer_id
+    LEFT JOIN payments p
+    ON o.id = p.order_id
+GROUP BY c.name
+ORDER BY total_paid DESC
 
 =====================================================
 TASK 16 — High spending customers
