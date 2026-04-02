@@ -2283,6 +2283,26 @@ FROM customers c
 GROUP BY c.name
 ORDER BY total_paid DESC
 
+Correct:
+SELECT
+    c.name AS customer_name,
+    COUNT(DISTINCT o.id) AS total_orders,
+    COALESCE(SUM(p.amount), 0) AS total_paid
+
+FROM customers c
+
+LEFT JOIN orders o
+    ON c.id = o.customer_id
+
+LEFT JOIN payments p
+    ON o.id = p.order_id
+
+GROUP BY c.name
+
+ORDER BY total_paid DESC;
+
+
+
 =====================================================
 TASK 16 — High spending customers
 Return:
