@@ -2342,6 +2342,7 @@ FROM customers c
     LEFT JOIN payments p
     ON o.id = p.order_id
 
+
 WHERE total paid >
 (SELECT AVG(amount) AS average_paid_of_all_customers
 FROM payments
