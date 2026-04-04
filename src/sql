@@ -2337,12 +2337,13 @@ Sort by total_paid DESC
 =====================================================
 SELECT c.name AS customer_name, SUM(p.amount) AS total_paid
 FROM customers c
-LEFT JOIN orders o
-on c.id = o.customer_id
-LEFT JOIN payments p
-ON o.id = p.order_id
+    LEFT JOIN orders o
+    on c.id = o.customer_id
+    LEFT JOIN payments p
+    ON o.id = p.order_id
 
-WHERE total paid > (SELECT AVG(amount) AS average_paid_of_all_customers
+WHERE total paid >
+(SELECT AVG(amount) AS average_paid_of_all_customers
 FROM payments
 GROUP BY average_paid_of_all_customers)
 ORDER BY total_paid DESC
