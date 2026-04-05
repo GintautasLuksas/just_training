@@ -2397,6 +2397,26 @@ ON p.id = sa.product_id
 GROUP BY p.name, total_sold DESC
 
 
+
+TABLE: products
+id | name
+1  | Keyboard
+2  | Mouse
+3  | Monitor
+
+TABLE: stock
+id | product_id | quantity
+1  | 1          | 50
+2  | 2          | 20
+3  | 3          | 10
+
+TABLE: sales
+id | product_id | quantity | price
+1  | 1          | 2        | 50
+2  | 1          | 1        | 45
+3  | 2          | 5        | 20
+4  | 3          | 1        | 200
+
 =====================================================
 TASK 18 — Low stock products
 Return:
@@ -2408,6 +2428,49 @@ remaining_stock < 10
 
 Sort by remaining_stock ASC
 =====================================================
+SELECT
+    p.name AS products_name,
+    COALESCE(st.quantity, 0) - COALESCE(sa.sold_quantity, 0) AS remaining_stock
+FROM products p
+LEFT JOIN(
+    SELECT product_id, SUM(quantity) AS stock
+    FROM stock
+    GROUP BY product_id
+) st
+ON p.id = st.product_id
+LEFT JOIN(
+    SELECT product_id, SUM(quantity) AS sold_quantity
+    FROM sales
+    GROUP BY product_id
+) sa
+ON p.id = sa.product_id
+WHERE COALESCE(st.quantity, 0) - COALESCE(sa.sold_quantity, 0) <10
+ORDER BY remaining_stock ASC
+
+
+SELECT
+    p.name AS product_name,
+    COALESCE(st.stock, 0) - COALESCE(sa.sold_quantity, 0) AS remaining_stock
+FROM products p
+
+LEFT JOIN (
+    SELECT product_id, SUM(quantity) AS stock
+    FROM stock
+    GROUP BY product_id
+) st
+ON p.id = st.product_id
+
+LEFT JOIN (
+    SELECT product_id, SUM(quantity) AS sold_quantity
+    FROM sales
+    GROUP BY product_id
+) sa
+ON p.id = sa.product_id
+
+WHERE COALESCE(st.stock, 0) - COALESCE(sa.sold_quantity, 0) < 10
+
+ORDER BY remaining_stock ASC;
+
 
 =====================================================
 TABLES FOR TASK 19 & 20
@@ -2442,6 +2505,9 @@ Return:
 Include departments with no bonuses
 Sort by total_bonus DESC
 =====================================================
+
+
+
 
 
 =====================================================
