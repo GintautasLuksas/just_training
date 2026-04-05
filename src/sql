@@ -2545,6 +2545,26 @@ LEFT JOIN (
 GROUP BY d.id, d.name
 
 ORDER BY total_bonus DESC;
+
+
+
+TABLE: employees
+id | name | department_id
+1  | Tom  | 1
+2  | Sara | 1
+3  | Mike | 2
+4  | Anna | 2
+
+TABLE: departments
+id | name
+1  | IT
+2  | HR
+
+TABLE: bonuses
+id | employee_id | amount
+1  | 1           | 100
+2  | 2           | 200
+3  | 3           | 150
 =====================================================
 TASK 20 — High bonus departments
 Return:
@@ -2556,6 +2576,33 @@ avg_bonus > overall_avg_bonus
 
 Sort by avg_bonus DESC
 =====================================================
+SELECT d.name AS department_name, AVG(b.amount) AS avg_bonus
+FROM departments d
+LEFT JOIN employees e
+ON d.Id = e.department_id
+LEFT JOIN bonuses b
+ON e.id = b.employee_id
+GROUP BY d.name
+WHERE AVG(b.amount) > (SELECT AVG(amount) AS overall_avg_bonus FROM bonuses GROUP BY overall_avg_bonus)
+
+SELECT
+    d.name AS department_name,
+    AVG(b.amount) AS avg_bonus
+
+FROM departments d
+
+LEFT JOIN employees e ON d.id = e.department_id
+LEFT JOIN bonuses b ON e.id = b.employee_id
+
+GROUP BY d.id, d.name
+
+HAVING AVG(b.amount) > (
+    SELECT AVG(amount)
+    FROM bonuses
+)
+
+ORDER BY avg_bonus DESC;
+
 
 =====================================================
 TABLES FOR TASK 21 & 22
