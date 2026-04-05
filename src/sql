@@ -2385,6 +2385,16 @@ Return:
 
 Sort by total_sold DESC
 =====================================================
+SELECT
+    p.name AS product_name,
+    SUM(sa.quantity) AS total_sold,
+    SUM(s.quantity) - SUM(sa.quantity)  AS remaining_stock
+FROM products p
+LEFT JOIN stock s
+ON p.id = s.product_id
+LEFT JOIN sales sa
+ON p.id = sa.product_id
+GROUP BY p.name, total_sold DESC
 
 
 =====================================================
@@ -2489,3 +2499,19 @@ total_logins > 1
 
 Sort by total_logins DESC
 ==============================================================================================
+
+
+SELECT
+    e.id,
+    COUNT(s.id)
+FROM employees e
+JOIN salaries s ON e.id = s.employee_id
+GROUP BY e.id
+
+SELECT
+    e.id,
+    COUNT(s.id)
+FROM employees e
+LEFT JOIN salaries s
+    ON e.id = s.employee_id
+GROUP BY e.id
