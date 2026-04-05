@@ -2505,11 +2505,46 @@ Return:
 Include departments with no bonuses
 Sort by total_bonus DESC
 =====================================================
+SELECT
+    d.name AS department_name,
+    e.total_employees AS total_employees,
+    e.total_bonus AS total_bonus
+FROM departments d
+LEFT JOIN(
+    SELECT
+    department_id,
+    COUNT(id) AS total_employees,
+    b.total_bonus AS total_bonus
+    FROM employees e
+    LEFT JOIN(
+        SELECT employee_id, SUM(amount) AS total_bonus
+        FROM bonuses
+        GROUP BY employee_id) b
+        ON e.id = b.employee_id
+    GROUP BY department_id) e
+ON d.id = e.department_id
+ORDER BY total_bonus DESC
 
+SELECT
+    d.name AS department_name,
+    COUNT(e.id) AS total_employees,
+    COALESCE(SUM(b.total_bonus), 0) AS total_bonus
 
+FROM departments d
 
+LEFT JOIN employees e
+    ON d.id = e.department_id
 
+LEFT JOIN (
+    SELECT employee_id, SUM(amount) AS total_bonus
+    FROM bonuses
+    GROUP BY employee_id
+) b
+    ON e.id = b.employee_id
 
+GROUP BY d.id, d.name
+
+ORDER BY total_bonus DESC;
 =====================================================
 TASK 20 — High bonus departments
 Return:
