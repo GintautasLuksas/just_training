@@ -2635,6 +2635,15 @@ Include users with no logins
 Sort by total_logins DESC
 =====================================================
 
+SELECT
+    u.name AS user_name,
+    COALESCE(COUNT(l.id), 0) AS total_logins,
+    MAX(login_date) SA last_login_dat
+FROM users s
+LEFT JOIN logins l
+ON u.id = l.user_id
+GROUP BY u.id, u.name
+ORDER BY total_logins DESC
 
 =====================================================
 TASK 22 — Active users
