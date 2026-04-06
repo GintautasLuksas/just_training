@@ -2645,6 +2645,35 @@ ON u.id = l.user_id
 GROUP BY u.id, u.name
 ORDER BY total_logins DESC
 
+
+SELECT
+    u.name AS user_name,
+    COUNT(l.id) AS total_logins,
+    MAX(l.login_date) AS last_login_date
+
+FROM users u
+
+LEFT JOIN logins l
+    ON u.id = l.user_id
+
+GROUP BY u.id, u.name
+
+ORDER BY total_logins DESC;
+
+SELECT
+    u.name AS user_name,
+    COUNT(l.id) AS total_logins,
+    MAX(l.login_date) AS last_login_date
+
+FROM users u
+
+LEFT JOIN logins l
+    ON u.id = l.user_id
+
+GROUP BY u.id, u.name
+
+ORDER BY total_logins DESC;
+
 =====================================================
 TASK 22 — Active users
 Return:
