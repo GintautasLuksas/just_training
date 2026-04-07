@@ -2742,6 +2742,17 @@ Include creators with no videos
 Sort by total_watch_time DESC
 =====================================================
 
+SELECT
+    c.name AS creator_name,
+    COALESCE(COUNT(v.id), 0) AS total_videos,
+    COALESCE(SUM(vi.watch_time), 0) AS total_watch_time
+FROM creators c
+LEFT JOIN videos v
+on c.id = v.creator_id
+LEFT JOIN views vi
+ON v.id = vi.video_id
+GROUP BY c.id, c.name
+ORDER BY total_watch_time DESC
 
 =====================================================
 TASK 23 — High engagement creators
