@@ -2771,6 +2771,29 @@ GROUP BY c.id, c.name
 
 ORDER BY total_watch_time DESC;
 
+
+TABLE: creators
+id | name
+1  | Leo
+2  | Mia
+3  | Noah
+4  | Zara
+
+TABLE: videos
+id | creator_id | title
+1  | 1          | V1
+2  | 1          | V2
+3  | 2          | V3
+4  | 3          | V4
+
+TABLE: views
+id | video_id | watch_time
+1  | 1        | 10
+2  | 1        | 15
+3  | 2        | 20
+4  | 3        | 5
+5  | 3        | 10
+
 =====================================================
 TASK 23 — High engagement creators
 Return:
