@@ -2808,8 +2808,17 @@ Sort by avg_watch_time DESC
 
 =====================================================
 
-SELECT c.name AS creator_name, v.
+SELECT c.name AS creator_name, views.avg AS avg_watch_time
 FROM creators c
+LEFT JOIN videos v
+ON c.id = v.creator_id
+LEFT JOIN(
+      SELECT video_id, AVG(watch_time) AS avg
+      FROM views
+      GROUP BY video_id)
+ON v.creator_id = views.video_id
+WHERE avg_watch_time > (SELECT AVG(views.watch_time) FROM views)
+ORDER BY avg_watch_time DESC
 
 =====================================================
 TABLES FOR TASK 22 & 23
