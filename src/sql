@@ -2820,6 +2820,27 @@ ON v.creator_id = views.video_id
 WHERE avg_watch_time > (SELECT AVG(views.watch_time) FROM views)
 ORDER BY avg_watch_time DESC
 
+SELECT
+    c.name AS creator_name,
+    AVG(vi.watch_time) AS avg_watch_time
+
+FROM creators c
+
+LEFT JOIN videos v
+    ON c.id = v.creator_id
+
+LEFT JOIN views vi
+    ON v.id = vi.video_id
+
+GROUP BY c.id, c.name
+
+HAVING AVG(vi.watch_time) > (
+    SELECT AVG(watch_time)
+    FROM views
+)
+
+ORDER BY avg_watch_time DESC;
+
 =====================================================
 TABLES FOR TASK 22 & 23
 =====================================================
