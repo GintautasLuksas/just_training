@@ -2809,7 +2809,6 @@ Sort by avg_watch_time DESC
 
 
 
-
 =====================================================
 
 SELECT c.name AS creator_name, views.avg AS avg_watch_time
