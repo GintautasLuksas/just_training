@@ -2945,6 +2945,7 @@ SELECT
 
 FROM creators c
 
+
 LEFT JOIN videos v
     ON c.id = v.creator_id
 
