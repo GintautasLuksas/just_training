@@ -3007,6 +3007,23 @@ LEFT JOIN songs s
 LEFT JOIN plays p
     ON s.id = p.song_id
 GROUP BY total_plays
+
+SELECT
+    a.name AS artist_name,
+    COUNT(DISTINCT s.id) AS total_songs,
+    COALESCE(SUM(p.count), 0) AS total_plays
+
+FROM artists a
+
+LEFT JOIN songs s
+    ON a.id = s.artist_id
+
+LEFT JOIN plays p
+    ON s.id = p.song_id
+
+GROUP BY a.id, a.name
+
+ORDER BY total_plays DESC;
 =====================================================
 TASK 27 — Popular artists
 Return:
