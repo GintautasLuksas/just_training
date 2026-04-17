@@ -2997,7 +2997,16 @@ Include artists with no songs
 Sort by total_plays DESC
 =====================================================
 
-
+SELECT
+    a.name AS artist_name,
+    COALESCE(COUNT(s.artist_id), 0) AS total_songs,
+    COUNT(p.count) AS total_plays
+FROM artists a
+LEFT JOIN songs s
+    ON a.id = s.artist_id
+LEFT JOIN plays p
+    ON s.id = p.song_id
+GROUP BY total_plays
 =====================================================
 TASK 27 — Popular artists
 Return:
