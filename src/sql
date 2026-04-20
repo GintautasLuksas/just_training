@@ -3031,7 +3031,6 @@ Return:
 - avg_plays_per_song
 
 
-
 Only include artists where:
 avg_plays_per_song > overall_avg_plays_per_song
 
