@@ -3023,6 +3023,7 @@ LEFT JOIN plays p
 
 GROUP BY a.id, a.name
 
+
 ORDER BY total_plays DESC;
 =====================================================
 TASK 27 — Popular artists
