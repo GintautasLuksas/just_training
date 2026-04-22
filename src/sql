@@ -3059,3 +3059,189 @@ avg_plays_per_song > overall_avg_plays_per_song
 
 Sort by avg_plays_per_song DESC
 =====================================================
+SELECT a.name AS artist_name, p.avg_play_per_song AS avg_plays_per_song
+FROM artists a
+LEFT JOIN songs s
+ON a.id = s.artist_id
+LEFT JOIN (
+    SELECT song_id, SUM(count / song_id) AS avg_play_per_song
+    FROM plays
+    GROUP BY song_id) p
+ON s.id = p.song_id
+GROUP BY a.id, a.name
+HAVING avg_plays
+ORDER BY avg_plays_per_song > (SELECT AVG(count) FROM plays)
+
+
+SELECT
+    a.name AS artist_name,
+    SUM(p.count) * 1.0 / COUNT(DISTINCT s.id) AS avg_plays_per_song
+
+FROM artists a
+
+LEFT JOIN songs s
+    ON a.id = s.artist_id
+
+LEFT JOIN plays p
+    ON s.id = p.song_id
+
+GROUP BY a.id, a.name
+
+HAVING SUM(p.count) * 1.0 / COUNT(DISTINCT s.id) > (
+    SELECT
+        SUM(count) * 1.0 / COUNT(DISTINCT song_id)
+    FROM plays
+)
+
+ORDER BY avg_plays_per_song DESC;
+
+
+=====================================================
+TABLES FOR TASK 28 & 29
+=====================================================
+
+TABLE: chefs
+id | name
+1  | Gordon
+2  | Jamie
+3  | Nigella
+4  | Marco
+
+TABLE: dishes
+id | chef_id | name
+1  | 1       | Steak
+2  | 1       | Burger
+3  | 2       | Pasta
+4  | 3       | Cake
+
+TABLE: orders
+id | dish_id | quantity
+1  | 1       | 2
+2  | 1       | 3
+3  | 2       | 1
+4  | 3       | 4
+
+
+=====================================================
+TASK 28 — Chef production summary
+Return:
+- chef_name
+- total_dishes
+- total_orders
+
+Include chefs with no dishes
+Sort by total_orders DESC
+=====================================================
+
+
+=====================================================
+TASK 29 — High performing chefs
+Return:
+- chef_name
+- avg_orders_per_dish
+
+Only include chefs where:
+avg_orders_per_dish > overall_avg_orders_per_dish
+
+Sort by avg_orders_per_dish DESC
+=====================================================
+
+=====================================================
+TABLES FOR TASK 30 & 31
+=====================================================
+
+TABLE: teachers
+id | name
+1  | Alice
+2  | Bob
+3  | Carol
+4  | David
+
+TABLE: classes
+id | teacher_id | subject
+1  | 1          | Math
+2  | 1          | Physics
+3  | 2          | History
+4  | 3          | Biology
+
+TABLE: attendances
+id | class_id | students_count
+1  | 1        | 20
+2  | 1        | 25
+3  | 2        | 15
+4  | 3        | 30
+
+
+=====================================================
+TASK 30 — Teacher workload summary
+Return:
+- teacher_name
+- total_classes
+- total_students
+
+Include teachers with no classes
+Sort by total_students DESC
+=====================================================
+
+
+=====================================================
+TASK 31 — Popular teachers
+Return:
+- teacher_name
+- avg_students_per_class
+
+Only include teachers where:
+avg_students_per_class > overall_avg_students
+
+Sort by avg_students_per_class DESC
+=====================================================
+
+=====================================================
+TABLES FOR TASK 32 & 33
+=====================================================
+
+TABLE: streamers
+id | name
+1  | Ninja
+2  | Shroud
+3  | Poki
+4  | Myth
+
+TABLE: streams
+id | streamer_id | title
+1  | 1           | S1
+2  | 1           | S2
+3  | 2           | S3
+4  | 3           | S4
+
+TABLE: donations
+id | stream_id | amount
+1  | 1         | 100
+2  | 1         | 50
+3  | 2         | 30
+4  | 3         | 200
+
+
+=====================================================
+TASK 32 — Streamer earnings summary
+Return:
+- streamer_name
+- total_streams
+- total_donations
+
+Include streamers with no streams
+Sort by total_donations DESC
+=====================================================
+
+
+=====================================================
+TASK 33 — Top streamers
+Return:
+- streamer_name
+- avg_donation_per_stream
+
+Only include streamers where:
+avg_donation_per_stream > overall_avg_donation
+
+Sort by avg_donation_per_stream DESC
+=====================================================
