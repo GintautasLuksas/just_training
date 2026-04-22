@@ -3025,6 +3025,27 @@ GROUP BY a.id, a.name
 
 
 ORDER BY total_plays DESC;
+
+TABLE: artists
+id | name
+1  | Jay
+2  | Lina
+3  | Omar
+4  | Eva
+
+TABLE: songs
+id | artist_id | duration
+1  | 1         | 200
+2  | 1         | 180
+3  | 2         | 220
+4  | 3         | 150
+
+TABLE: plays
+id | song_id | count
+1  | 1       | 10
+2  | 1       | 5
+3  | 2       | 7
+4  | 3       | 3
 =====================================================
 TASK 27 — Popular artists
 Return:
