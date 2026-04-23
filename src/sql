@@ -3073,6 +3073,9 @@ HAVING avg_plays
 ORDER BY avg_plays_per_song > (SELECT AVG(count) FROM plays)
 
 
+
+
+
 SELECT
     a.name AS artist_name,
     SUM(p.count) * 1.0 / COUNT(DISTINCT s.id) AS avg_plays_per_song
