@@ -3073,7 +3073,6 @@ HAVING avg_plays
 ORDER BY avg_plays_per_song > (SELECT AVG(count) FROM plays)
 
 
-
 SELECT
     a.name AS artist_name,
     SUM(p.count) * 1.0 / COUNT(DISTINCT s.id) AS avg_plays_per_song
@@ -3133,6 +3132,25 @@ Return:
 Include chefs with no dishes
 Sort by total_orders DESC
 =====================================================
+SELECT
+    c.name,
+    COUNT(DISTINCT d.id) AS total_dishes,
+    COALESCE(SUM(o.quantity), 0) AS total_orders
+
+FROM chefs c
+
+LEFT JOIN dishes d
+    ON c.id = d.chef_id
+
+LEFT JOIN orders o
+    ON d.id = o.dish_id
+
+GROUP BY c.id, c.name
+
+ORDER BY total_orders DESC;
+
+
+
 
 
 =====================================================
