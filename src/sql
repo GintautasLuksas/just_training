@@ -3121,8 +3121,6 @@ id | dish_id | quantity
 3  | 2       | 1
 4  | 3       | 4
 
-
-
 =====================================================
 TASK 28 — Chef production summary
 Return:
@@ -3133,7 +3131,14 @@ Return:
 Include chefs with no dishes
 Sort by total_orders DESC
 =====================================================
-
+SELECT c.name, COALESCE(COUNT(DISTINCT d.id), 0) AS total_dishes, SUM(o.quantity) AS total_orders
+FROM chefs c
+LEFT JOIN dishes d
+ON c.id = d.chef_id
+LEFT JOIN orders o
+ON d.id = o.dish_id
+GROUP BY c.id, c.name
+ORDER BY total_orders DESC
 
 =====================================================
 TASK 29 — High performing chefs
