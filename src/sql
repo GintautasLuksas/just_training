@@ -3178,8 +3178,41 @@ Sort by avg_orders_per_dish DESC
 =====================================================
 TABLES FOR TASK 30 & 31
 =====================================================
-select c.name AS chef_name, 
+SELECT c.name AS chef_name, o.avg_orders_per_dish AS avg_orders_per_dish
 FROM chefs c
+LEFT JOIN dishes d
+ON c.id = d.chef_id
+LEF JOIN (
+    SELECT dish_id, AVG(quantity) AS avg_orders_per_dish
+    FROM orders
+    GROUP BY dish_id) o
+ON d.id = o.dish_id
+GROUP BY c.id, c.name
+ORDER BY avg_orders_per_dish
+WHERE avg_orders_per_dish > (SELECT COUNT(id) / SUM(quantity) AS overall_avg_orders_per_dish FROM orders)
+
+
+SELECT
+    c.name AS chef_name,
+    SUM(o.quantity) * 1.0 / COUNT(DISTINCT d.id) AS avg_orders_per_dish
+
+FROM chefs c
+
+LEFT JOIN dishes d
+    ON c.id = d.chef_id
+
+LEFT JOIN orders o
+    ON d.id = o.dish_id
+
+GROUP BY c.id, c.name
+
+HAVING SUM(o.quantity) * 1.0 / COUNT(DISTINCT d.id) > (
+    SELECT
+        SUM(quantity) * 1.0 / COUNT(DISTINCT dish_id)
+    FROM orders
+)
+
+ORDER BY avg_orders_per_dish DESC;
 
 TABLE: teachers
 id | name
