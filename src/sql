@@ -3274,6 +3274,27 @@ GROUP BY t.id, t.name
 
 ORDER BY total_students DESC;
 
+TABLE: teachers
+id | name
+1  | Alice
+2  | Bob
+3  | Carol
+4  | David
+
+TABLE: classes
+id | teacher_id | subject
+1  | 1          | Math
+2  | 1          | Physics
+3  | 2          | History
+4  | 3          | Biology
+
+TABLE: attendances
+id | class_id | students_count
+1  | 1        | 20
+2  | 1        | 25
+3  | 2        | 15
+4  | 3        | 30
+
 =====================================================
 TASK 31 — Popular teachers
 Return:
@@ -3285,7 +3306,8 @@ avg_students_per_class > overall_avg_students
 
 Sort by avg_students_per_class DESC
 =====================================================
-
+SELECT t.name AS teacher_name, 
+FROM teachers t
 =====================================================
 TABLES FOR TASK 32 & 33
 =====================================================
