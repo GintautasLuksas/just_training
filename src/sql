@@ -3214,6 +3214,7 @@ HAVING SUM(o.quantity) * 1.0 / COUNT(DISTINCT d.id) > (
 
 ORDER BY avg_orders_per_dish DESC;
 
+
 TABLE: teachers
 id | name
 1  | Alice
