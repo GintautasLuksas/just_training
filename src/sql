@@ -3247,7 +3247,32 @@ Return:
 Include teachers with no classes
 Sort by total_students DESC
 =====================================================
+SELECT t.name AS teacher_name, COALESCE(COUNT(DISTINCT c.id), 0) AS total_classes, SUM(a.students_count) AS total_students
+FROM teachers t
+LEFT JOIN classes c
+ON t.id = c.teacher_id
+LEFT JOIN attendances a
+ON c.id = a.class_id
+GROUP BY t.id, t.name
+ORDER BY total_students DESC
 
+
+SELECT
+    t.name AS teacher_name,
+    COUNT(DISTINCT c.id) AS total_classes,
+    COALESCE(SUM(a.students_count), 0) AS total_students
+
+FROM teachers t
+
+LEFT JOIN classes c
+    ON t.id = c.teacher_id
+
+LEFT JOIN attendances a
+    ON c.id = a.class_id
+
+GROUP BY t.id, t.name
+
+ORDER BY total_students DESC;
 
 =====================================================
 TASK 31 — Popular teachers
