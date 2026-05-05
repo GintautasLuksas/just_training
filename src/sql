@@ -3306,14 +3306,38 @@ avg_students_per_class > overall_avg_students
 
 Sort by avg_students_per_class DESC
 =====================================================
-SELECT t.name AS teacher_name, COUNT(DISTINCT c.id) / SUM(a.students_count) AS avg_students_per_class
+SELECT t.name AS teacher_name, SUM(a.students_count) / COUNT(DISTINCT c.id) AS avg_students_per_class
 FROM teachers t
 LEFT JOIN classes c
 ON t.id = c.teacher_id
 LEFT JOIN attendances a
 ON c.id = a.class_id
 GROUP BY t.id, t.name
-HAVING avg_students_per_class > 
+HAVING avg_students_per_class > (SELECT SUM(students_count) / COUNT(class_id) FROM attendances)
+ORDER BY avg_students_per_class DESC
+
+SELECT
+    t.name AS teacher_name,
+    SUM(a.students_count) * 1.0 / COUNT(DISTINCT c.id) AS avg_students_per_class
+
+FROM teachers t
+
+LEFT JOIN classes c
+    ON t.id = c.teacher_id
+
+LEFT JOIN attendances a
+    ON c.id = a.class_id
+
+GROUP BY t.id, t.name
+
+HAVING SUM(a.students_count) * 1.0 / COUNT(DISTINCT c.id) > (
+    SELECT
+        SUM(students_count) * 1.0 / COUNT(DISTINCT class_id)
+    FROM attendances
+)
+
+ORDER BY avg_students_per_class DESC;
+
 =====================================================
 TABLES FOR TASK 32 & 33
 =====================================================
