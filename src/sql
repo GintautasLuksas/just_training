@@ -3386,4 +3386,5 @@ Only include streamers where:
 avg_donation_per_stream > overall_avg_donation
 
 Sort by avg_donation_per_stream DESC
-=====================================================
+===============================================
+======
