@@ -48,6 +48,7 @@ def init_metadata(engine: Engine, settings: Settings) -> None:
                     expected_sql TEXT NOT NULL,
                     solution_sql TEXT NOT NULL,
                     hint TEXT NOT NULL DEFAULT '',
+                    hint2 TEXT NOT NULL DEFAULT '',
                     concepts TEXT[] NOT NULL DEFAULT '{{}}',
                     difficulty INTEGER NOT NULL DEFAULT 1,
                     estimated_minutes INTEGER NOT NULL DEFAULT 5,
@@ -57,6 +58,7 @@ def init_metadata(engine: Engine, settings: Settings) -> None:
                 """
             )
         )
+        conn.execute(text(f'ALTER TABLE "{schema}".tasks ADD COLUMN IF NOT EXISTS hint2 TEXT NOT NULL DEFAULT \'\''))
         conn.execute(
             text(
                 f"""
@@ -82,11 +84,11 @@ def seed_tasks(engine: Engine, settings: Settings, tasks: list[dict[str, Any]]) 
                     f"""
                     INSERT INTO "{schema}".tasks (
                         slug, title, prompt, setup_sql, expected_sql, solution_sql,
-                        hint, concepts, difficulty, estimated_minutes, sort_order
+                        hint, hint2, concepts, difficulty, estimated_minutes, sort_order
                     )
                     VALUES (
                         :slug, :title, :prompt, :setup_sql, :expected_sql, :solution_sql,
-                        :hint, :concepts, :difficulty, :estimated_minutes, :sort_order
+                        :hint, :hint2, :concepts, :difficulty, :estimated_minutes, :sort_order
                     )
                     ON CONFLICT (slug) DO UPDATE SET
                         title = EXCLUDED.title,
@@ -95,13 +97,14 @@ def seed_tasks(engine: Engine, settings: Settings, tasks: list[dict[str, Any]]) 
                         expected_sql = EXCLUDED.expected_sql,
                         solution_sql = EXCLUDED.solution_sql,
                         hint = EXCLUDED.hint,
+                        hint2 = EXCLUDED.hint2,
                         concepts = EXCLUDED.concepts,
                         difficulty = EXCLUDED.difficulty,
                         estimated_minutes = EXCLUDED.estimated_minutes,
                         sort_order = EXCLUDED.sort_order
                     """
                 ),
-                task,
+                {**task, "hint2": task.get("hint2", "")},
             )
 
 
@@ -116,7 +119,7 @@ def get_all_tasks(engine: Engine, settings: Settings) -> list[dict[str, Any]]:
             f"""
             SELECT
                 slug, title, prompt, setup_sql, expected_sql, solution_sql,
-                hint, concepts, difficulty, estimated_minutes, sort_order
+                hint, hint2, concepts, difficulty, estimated_minutes, sort_order
             FROM "{schema}".tasks
             ORDER BY sort_order, id
             """

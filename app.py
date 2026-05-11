@@ -31,24 +31,50 @@ st.markdown(
         justify-content: center;
         width: 100%;
         overflow-x: auto;
-        padding: 0.25rem 0 0.75rem;
+        padding: 0;
+    }
+    .table-title {
+        text-align: center;
+        font-weight: 700;
+        margin: 0;
+        padding: 0.35rem 0.5rem;
+        color: #111827;
+        background: #e5e7eb;
+        border: 1px solid #cbd5e1;
+        border-bottom: 0;
+        border-radius: 6px 6px 0 0;
+    }
+    .table-card {
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
     .practice-table table {
         border-collapse: collapse;
-        min-width: 420px;
-        max-width: 100%;
+        width: 100%;
         font-size: 0.92rem;
+        color: #111827;
+        background: #ffffff;
     }
     .practice-table th,
     .practice-table td {
-        border: 1px solid rgba(49, 51, 63, 0.18);
+        border: 1px solid #cbd5e1;
         padding: 0.38rem 0.65rem;
         text-align: center;
         white-space: nowrap;
     }
     .practice-table th {
-        background: rgba(49, 51, 63, 0.06);
+        color: #111827;
+        background: #f3f4f6;
         font-weight: 700;
+    }
+    .practice-table td {
+        color: #111827;
+        background: #ffffff;
+    }
+    .practice-table tr:nth-child(even) td {
+        background: #f9fafb;
     }
     </style>
     """,
@@ -112,11 +138,21 @@ def show_practice_tables(engine, settings, task):
         st.info("No practice tables found for this task.")
         return
     st.caption(f"This task uses {len(tables)} table{'s' if len(tables) != 1 else ''}.")
-    tabs = st.tabs(list(tables.keys()))
-    for tab_panel, (table_name, data) in zip(tabs, tables.items()):
-        with tab_panel:
-            html = data.to_html(index=False, escape=True, border=0)
-            st.markdown(f'<div class="practice-table">{html}</div>', unsafe_allow_html=True)
+    table_items = list(tables.items())
+    for start in range(0, len(table_items), 2):
+        columns = st.columns(min(2, len(table_items) - start))
+        for column, (table_name, data) in zip(columns, table_items[start : start + 2]):
+            with column:
+                html = data.to_html(index=False, escape=True, border=0)
+                st.markdown(
+                    f"""
+                    <div class="table-card">
+                        <div class="table-title">{table_name}</div>
+                        <div class="practice-table">{html}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
 
 def clean_slug(value):
@@ -144,7 +180,8 @@ def task_manager(engine, settings):
             setup_sql = st.text_area("Setup SQL", height=180, placeholder="CREATE TABLE ...\nINSERT INTO ...")
             expected_sql = st.text_area("Expected SQL", height=120, placeholder="SELECT ...")
             solution_sql = st.text_area("Solution SQL", height=120, placeholder="SELECT ...")
-            hint = st.text_input("Hint", placeholder="Use GROUP BY after joining customers to orders.")
+            hint = st.text_input("Hint 1", placeholder="Use GROUP BY after joining customers to orders.")
+            hint2 = st.text_area("Hint 2", height=90, placeholder="Show customer_name and total_spent. Join customers to orders, group by customer, and sort by total_spent descending.")
             concepts = st.text_input("Concepts", placeholder="join, group by, avg")
             col_a, col_b, col_c = st.columns(3)
             with col_a:
@@ -165,6 +202,7 @@ def task_manager(engine, settings):
                 "expected_sql": expected_sql.strip(),
                 "solution_sql": solution_sql.strip() or expected_sql.strip(),
                 "hint": hint.strip(),
+                "hint2": hint2.strip(),
                 "concepts": parse_concepts(concepts),
                 "difficulty": int(difficulty),
                 "estimated_minutes": int(estimated_minutes),
@@ -284,7 +322,7 @@ run_clicked = False
 check_clicked = False
 solution_clicked = False
 
-task_workspace, table_panel = st.columns([1.05, 1.25], gap="large")
+task_workspace, table_panel = st.columns([1.05, 1.35], gap="medium")
 with task_workspace:
     st.subheader(task["title"])
     st.write(task["prompt"])
@@ -294,8 +332,14 @@ with task_workspace:
         f"{int(task['estimated_minutes'])} min | {concept_labels}"
     )
 
-    with st.expander("Hint", expanded=True):
-        st.write(task["hint"])
+    with st.expander("Hint 1", expanded=False):
+        st.write(task["hint"] or "No first hint for this task.")
+
+    with st.expander("Hint 2", expanded=False):
+        if task.get("hint2"):
+            st.write(task["hint2"])
+        else:
+            st.caption("No second hint for this task.")
 
     st.markdown("**Your SQL**")
     query_key = f"query_text_{task['id']}"
@@ -349,7 +393,14 @@ with table_panel:
             st.session_state.last_result = None
             st.rerun()
     with nav2:
-        if st.button("Next", use_container_width=True, disabled=st.session_state.task_index >= task_count - 1):
+        if st.session_state.task_index >= task_count - 1:
+            if st.button("Finish session", type="primary", use_container_width=True):
+                st.success("Session complete. Nice work.")
+                st.session_state.daily_tasks = get_daily_tasks(engine, settings, minutes=30)
+                st.session_state.task_index = 0
+                st.session_state.last_result = None
+                st.rerun()
+        elif st.button("Next", use_container_width=True):
             st.session_state.task_index += 1
             st.session_state.last_result = None
             st.rerun()
