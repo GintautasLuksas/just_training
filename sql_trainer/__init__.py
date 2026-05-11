@@ -1,0 +1,2 @@
+"""Daily PostgreSQL SQL trainer."""
+

@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
 from dotenv import load_dotenv
 import os
 import pandas as pd
@@ -17,7 +18,14 @@ def insert_dataframe_to_postgres(df: pd.DataFrame, table_name: str):
     print(f"Connecting to DB {dbname} at {host}:{port} as {user}")
 
     try:
-        db_url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}"
+        db_url = URL.create(
+            "postgresql+pg8000",
+            username=user,
+            password=password,
+            host=host,
+            port=int(port),
+            database=dbname,
+        )
         engine = create_engine(db_url)
         df.to_sql(table_name, engine, if_exists='replace', index=False)
         print(f"Inserted {len(df)} rows into '{table_name}'")
