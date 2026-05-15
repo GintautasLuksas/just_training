@@ -314,7 +314,7 @@ def get_practice_tables(engine: Engine, settings: Settings) -> dict[str, pd.Data
 
 def normalize_df(df: pd.DataFrame) -> pd.DataFrame:
     normalized = df.copy()
-    normalized.columns = [str(col).lower() for col in normalized.columns]
+    normalized.columns = list(range(len(normalized.columns)))
     normalized = normalized.applymap(
         lambda value: float(value)
         if isinstance(value, Decimal) and value % 1
@@ -331,13 +331,13 @@ def normalize_df(df: pd.DataFrame) -> pd.DataFrame:
 def compare_frames(user_df: pd.DataFrame, expected_df: pd.DataFrame) -> tuple[bool, str]:
     left = normalize_df(user_df)
     right = normalize_df(expected_df)
-    if list(left.columns) != list(right.columns):
-        return False, "Column names or column order do not match the expected result."
+    if left.shape[1] != right.shape[1]:
+        return False, f"Expected {right.shape[1]} columns, got {left.shape[1]} columns. Column names do not need to match."
     if left.shape != right.shape:
         return False, f"Expected {right.shape[0]} rows and {right.shape[1]} columns, got {left.shape[0]} rows and {left.shape[1]} columns."
     if not left.equals(right):
         return False, "The result shape is right, but one or more values differ."
-    return True, "Correct. Same columns, rows, and values as the expected result."
+    return True, "Correct. Same row and column values as the expected result. Column names can be different."
 
 
 def check_answer(engine: Engine, settings: Settings, task: dict[str, Any], submitted_sql: str) -> CheckResult:

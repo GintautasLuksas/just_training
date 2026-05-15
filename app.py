@@ -113,17 +113,30 @@ def show_result(result):
     if result.error:
         st.code(result.error, language="text")
     if result.user_df is not None:
-        left, right = st.columns(2)
-        with left:
-            st.caption("Your result")
-            st.dataframe(result.user_df, use_container_width=True)
-        with right:
-            st.caption("Expected result")
-            st.dataframe(result.expected_df, use_container_width=True)
+        st.markdown("**Your result**")
+        show_readable_table("Your result", result.user_df, show_title=False)
+        st.markdown("**Expected result**")
+        show_readable_table("Expected result", result.expected_df, show_title=False)
 
 
 def format_concepts(concepts):
     return ", ".join(str(concept) for concept in (concepts or []) if concept)
+
+
+def show_readable_table(title, data, show_title=True):
+    if data is None:
+        return
+    html = data.to_html(index=False, escape=True, border=0)
+    title_html = f'<div class="table-title">{title}</div>' if show_title else ""
+    st.markdown(
+        f"""
+        <div class="table-card">
+            {title_html}
+            <div class="practice-table">{html}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def run_preview(engine, settings, task, submitted_sql):
@@ -143,16 +156,7 @@ def show_practice_tables(engine, settings, task):
         columns = st.columns(min(2, len(table_items) - start))
         for column, (table_name, data) in zip(columns, table_items[start : start + 2]):
             with column:
-                html = data.to_html(index=False, escape=True, border=0)
-                st.markdown(
-                    f"""
-                    <div class="table-card">
-                        <div class="table-title">{table_name}</div>
-                        <div class="practice-table">{html}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+                show_readable_table(table_name, data)
 
 
 def clean_slug(value):
@@ -361,7 +365,7 @@ with task_workspace:
         try:
             preview = run_preview(engine, settings, task, submitted_sql)
             st.caption("Query result")
-            st.dataframe(preview, use_container_width=True)
+            show_readable_table("Query result", preview, show_title=False)
         except Exception as exc:
             st.error("Query failed.")
             st.code(str(exc), language="text")
